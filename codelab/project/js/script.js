@@ -9,9 +9,20 @@ const AUTHORIZATION_HEADER = "Bearer sk_test_efc0a320234d4887fbd4f1bb4419fb68ed7
 
 // Step 1 - Create customer (POST)
 
-function createCustomer(email) {
+function createCustomer(inputEmail) {
 
+  const options = {
+    method: "POST",
+    body: JSON.stringify({ email: inputEmail }),
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": AUTHORIZATION_HEADER
+    }
+  }
 
+  fetch("https://api.paystack.co/customer", options)
+    .then((res)=> res.json())
+    .then((json)=> console.log(json))
 }
 
 document.getElementById("create-customer-form").addEventListener("submit", (e) => {
@@ -24,12 +35,39 @@ document.getElementById("create-customer-form").addEventListener("submit", (e) =
 
 function listCustomers() {
 
+  const options = {
+    headers: {
+      "Authorization": AUTHORIZATION_HEADER
+    }
+  }
+
+  fetch("https://api.paystack.co/customer", options)
+    .then((res)=> res.json())
+    .then((json)=> displayCustomers(json.data))
+
 }
+
+listCustomers()
 
 
 // Step 3 - Initialize transaction (POST)
 
 function initTransaction(email, amount) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify({email: email, amount : amount}),
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": AUTHORIZATION_HEADER
+    }
+  }
+  fetch("https://api.paystack.co/transaction/initialize", options)
+    .then(res => res.json() )
+    .then(json => {
+      console.log(json)
+      document.getElementById("init-transaction-form").insertAdjacentHTML("afterend", `<p class="alert">Payment page successfully created! View at <a href="${json.data.authorization_url}">${json.data.authorization_url}</a></p>`);
+    })
+
 
 
 }
@@ -45,7 +83,28 @@ document.getElementById("init-transaction-form").addEventListener("submit", (e) 
 
 function listTransactions() {
 
+  const options = {
+    headers: {
+      "Authorization": AUTHORIZATION_HEADER
+    }
+  }
+
+  fetch("https://api.paystack.co/transaction", options)
+    .then((res)=> res.json())
+    .then((json)=> displayTransactions(json.data))
+
 }
+
+listTransactions()
+
+
+
+
+
+
+
+
+
 
 // Utility functions
 
@@ -55,8 +114,15 @@ function displayCustomers(customers) {
   let customersOption = "";
 
   customers.forEach((customer) => {
+
+    let image = "https://exelord.github.io/ember-initials/images/default-d5f51047d8bd6327ec4a74361a7aae7f.jpg";
+
+    if (customer.metadata && customer.metadata.photos) {
+      image = customer.metadata.photos[0].url;
+    }
+
     customersList += `<li>
-      <img src="${customer.metadata ? customer.metadata.photos[0].url : 'https://exelord.github.io/ember-initials/images/default-d5f51047d8bd6327ec4a74361a7aae7f.jpg'}">
+      <img src="${image}">
       <strong>${customer.first_name || ''} ${customer.last_name || ''}</strong>
       <p>${customer.email}</p>
       <p>${customer.customer_code}</p>
