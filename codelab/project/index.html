@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>REST API Codelab</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Overpass+Mono:400,700|Overpass:300,700" rel="stylesheet"> 
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header id="site-header">
+    <h1>
+      <img src="https://frontstack.io/images/frontstack-logo.svg" alt="Frontstack">
+    </h1>
+  </header>
+
+  <section class="card">
+    <header>
+      <h2>Customers</h2>
+    </header>
+
+    <form id="create-customer-form">
+      <input type="email" name="email" placeholder="email address" required>
+      <button type="submit">+ Create</button>
+    </form>
+
+    <ul id="all-customers"></ul>
+  </section>
+
+  <section class="card">
+    <header>
+      <h2>Transactions</h2>
+    </header>
+
+    <form id="init-transaction-form">
+      <input type="number" name="amount" placeholder="10000" required>
+      <select name="email" id="customer-emails" required>
+        <option value="null">Choose a customer:</option>
+      </select>
+      <button type="submit">+ Initialise</button>
+    </form>
+
+    <ul id="all-transactions"></ul>
+  </section>
+
+  <script src="js/final.js"></script>
+</body>
